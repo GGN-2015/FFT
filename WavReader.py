@@ -1,3 +1,5 @@
+# !/bin/python3
+
 import wave
 import numpy as np
 
@@ -14,15 +16,18 @@ def OpenWavFile(filename: str):
     frame_rate   = wavefile.getframerate()
     nframes      = wavefile.getnframes()
 
-    print("nchannels   : %6d" % nchannels)
-    print("sample_width: %6d" % sample_width)
-    print("frame_rate  : %6d" % frame_rate)
-    print("nframes     : %6d" % nchannels)
+    
+    sys.stderr.write("nchannels   : %6d\n" % nchannels)
+    sys.stderr.write("sample_width: %6d\n" % sample_width)
+    sys.stderr.write("frame_rate  : %6d\n" % frame_rate)
+    sys.stderr.write("nframes     : %6d\n" % nchannels)
 
     data = wavefile.readframes(nframes)
 
     # <i2: small-endian integer in 2 bytes
-    sig = np.frombuffer(data, dtype='<i2').reshape(-1, nchannels)
+    tmp = np.frombuffer(data, dtype='<i2')
+    # sig = tmp.reshape(-1, nchannels)
+    sig = tmp.reshape(-1, 1)
 
     # display the curve on the screen
     # plt.plot(sig)
@@ -38,7 +43,7 @@ def DumpSignal(wavefile):
     # output an average channel
     for i in range(len(sig)):
         ans = 0
-        for j in range(nchannels):
+        for j in range(1): # nchannels is 1
             ans += sig[i][j]
         print(ans / nchannels, end = " ")
 
