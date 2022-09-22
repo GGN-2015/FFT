@@ -1,0 +1,12 @@
+https://blog.csdn.net/Cy_coding/article/details/105107291
+https://ww2.mathworks.cn/help/signal/ref/spectrogram.html
+https://www.bilibili.com/read/cv4062395/
+https://blog.csdn.net/qcyfred/article/details/81558960
+https://www.jianshu.com/p/4676e44baf6d
+https://blog.csdn.net/greatwgb/article/details/17913559
+
+https://www.cnblogs.com/ranson7zop/p/7657874.html
+
+# mp3 转 wav
+ffmpeg -i 啥啊.mp3 -acodec pcm_u8 -ar 44100 啥啊.wav
+https://zhuanlan.zhihu.com/p/91257681
