@@ -17,15 +17,18 @@ lineWidth = int(sys.argv[2])
 # read in every line from the file
 df=[]
 for line in open(fileName):
-    data = []
-    tmp  = line.split()
-    tmp  = [float(x) for x in tmp] [:lineWidth]
-    df.append(data)
+    tmp  = [float(x) for x in line.split()] [:lineWidth]
+    df.append(tmp)
 
 # take a log is reasonable because its value is really high
-df = np.log(np.array(df))
+# +1 to avoid number 0
+df = np.log(np.array(df) + 1)
+
+print(df)
 
 sns.heatmap(df.T, cmap="YlOrRd")
 plt.xlabel("Time")
 plt.ylabel("Freqency (log) Amplitude")
 plt.show()
+
+plt.savefig('./Data/TMP/TMP.png')

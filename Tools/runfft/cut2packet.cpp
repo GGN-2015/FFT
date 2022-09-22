@@ -11,9 +11,16 @@ int CNT = 1024;
 const int N = 16384;
 double numbers[N];
 
-#define FFT_TMP_OUTPUT "./Data/TMP/TMP.fft"
-#define CUT_TMP_OUTPUT "./Data/TMP/TMP.cut"
-#define FFT_EXE_FILE   "./Tools/runfft/runfft"
+#ifdef _WIN32
+    #define LOCAL_DIR      "C:\\Users\\qwe\\Desktop\\Homework Cache\\2022 Autumn\\人工智能原理\\FFT\\"
+    #define FFT_TMP_OUTPUT " \"" LOCAL_DIR "Data\\TMP\\TMP.fft\""
+    #define CUT_TMP_OUTPUT " \"" LOCAL_DIR "Data\\TMP\\TMP.cut\""
+    #define FFT_EXE_FILE   "cmd /k \"" LOCAL_DIR "Tools\\runfft\\runfft.exe\""
+#else
+    #define FFT_TMP_OUTPUT "\"./Data/TMP/TMP.fft\""
+    #define CUT_TMP_OUTPUT "\"./Data/TMP/TMP.cut\""
+    #define FFT_EXE_FILE   "\"./Tools/runfft/runfft\""
+#endif
 
 void init(int argc, char* argv[]) {
     assert(argc <= 3);
@@ -138,3 +145,4 @@ int main(int argc, char* argv[]) {
     fclose(fp);
     return 0;
 }
+
