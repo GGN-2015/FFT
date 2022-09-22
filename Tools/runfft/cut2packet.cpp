@@ -21,11 +21,7 @@ void init(int argc, char* argv[]) {
     if(argc == 3) {
 
         /* int put filename from argv[1], LineWidth from argv[2]. */
-        int len = strlen(argv[2]);
-        CNT = 0;
-        for(int i = 0; i < len; i++) {
-            CNT = CNT * 10 + argv[2][i] - '0';
-        }
+        CNT = atoi(argv[2]);
         fp = fopen(argv[1], "r");
     } else if(argc == 2) {
 
@@ -34,7 +30,16 @@ void init(int argc, char* argv[]) {
     } else {
 
         /* input file name in CLI, Default LineWidth=1024. */
-        scanf("%s", filename);
+        fprintf(stdout, "[cut2packet] fileName >>>");
+        fgets(filename, sizeof(filename), stdin);
+
+        /* delete '\n' character. */
+        for(int i = 0; ; i ++) {
+            if(filename[i] == '\n') {
+                filename[i] = '\0';
+                break;
+            }
+        }
         fp = fopen(filename, "r");
     }
 
@@ -55,20 +60,20 @@ int judge(char tmp) {
     return 1;
 }
 
-int main(int args, char* argv[]) {
-    init(args, argv);
+int main(int argc, char* argv[]) {
+    init(argc, argv);
     char ch;
 
 	/* clean the content in file */
     fclose(fopen(FFT_TMP_OUTPUT, "w"));
 
 	/* read in from the file. */
+    int linecnt = 0;
     while((ch = fgetc(fp)) != EOF) {
 
 		/* output the cut message into CUT_TMP_OUTPUT. */
         wp = fopen(CUT_TMP_OUTPUT, "w");
         int i = 0;
-        int linecnt = 0;
 
         for(; i < CNT; i++) {
             int pow = 10;
@@ -95,11 +100,13 @@ int main(int args, char* argv[]) {
 #ifdef DECIMAL_INPUT
             if(ch == '.') {
                 ch = fgetc(fp);
-            }
-            while(ch >= '0' && ch <= '9') {
-                numbers[i] = numbers[i] + (ch - '0') / pow;
-                pow *= 10;
-                ch = fgetc(fp);
+                while(ch >= '0' && ch <= '9') {
+                    numbers[i] = numbers[i] + (ch - '0') / pow;
+                    pow *= 10;
+                    ch = fgetc(fp);
+                }
+            }else {
+                /* no decimal point. */
             }
 #endif
 
@@ -123,7 +130,7 @@ int main(int args, char* argv[]) {
         fprintf(stderr, "[cut2packet] output linecnt = %d\n", linecnt);
         
         if(Endflag == 0) {
-            system(FFT_EXE_FILE " " CUT_TMP_OUTPUT " >> " FFT_TMP_OUTPUT);
+            system(FFT_EXE_FILE " < " CUT_TMP_OUTPUT " >> " FFT_TMP_OUTPUT);
         } else {
             break;
         }
