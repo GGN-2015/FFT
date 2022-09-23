@@ -24,11 +24,41 @@ for line in open(fileName):
 # +1 to avoid number 0
 df = np.log(np.array(df) + 1)
 
+# music part
+parts = [0, 73, 146, 292, 584, 1024]
+
 print(df)
+# set picture size
+plt.figure(figsize=(1920 / 100, 1080 / 100))
 
-sns.heatmap(df.T, cmap="YlOrRd")
-plt.xlabel("Time")
-plt.ylabel("Freqency (log) Amplitude")
-plt.show()
+# two graph in a column
+fig, ax = plt.subplots(3, 1, constrained_layout=True, \
+        figsize=(19.20, 10.80))
 
+# output the HeatMap
+sns.heatmap(df.T, cmap="YlOrRd", ax=ax[0])
+
+# output the Average Map
+# ave = []
+# for i in range(df.shape[0]):
+#     ave.append(df[i].mean())
+# ave = np.array(ave)
+# sns.lineplot(ave, ax=ax[1])
+
+# output the Low Freq ave map
+ave = []
+for i in range(df.shape[0]):
+    ave.append(df[i, 0:73].mean())
+ave = np.array(ave)
+sns.lineplot(ave, ax=ax[1])
+
+# output the Middle Freq ave map
+ave = []
+for i in range(df.shape[0]):
+    ave.append(df[i, 73:292].mean())
+ave = np.array(ave)
+sns.lineplot(ave, ax=ax[2])
+
+# dump picture into file
 plt.savefig('./Data/TMP/TMP.png')
+
