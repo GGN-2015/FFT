@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$1" = "" ] ; then
-    echo -e "[auto.Error] Usage $0 \<ID\> "
+    echo -e "[auto.Error] Usage $0 \<ID\>"
     exit 0
 fi
 
