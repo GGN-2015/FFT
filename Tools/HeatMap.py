@@ -7,6 +7,7 @@ if len(sys.argv) != 3:
 
 # import process is very slow
 import numpy as np
+import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -25,7 +26,8 @@ for line in open(fileName):
 df = np.log(np.array(df) + 1)
 
 # music part
-parts = [0, 73, 146, 292, 584, 1024]
+PARTS = [0, 73, 146, 292, 584, 1024]
+WIDTH = 4 
 
 print(df)
 # set picture size
@@ -45,19 +47,62 @@ sns.heatmap(df.T, cmap="YlOrRd", ax=ax[0])
 # ave = np.array(ave)
 # sns.lineplot(ave, ax=ax[1])
 
-# output the Low Freq ave map
-ave = []
-for i in range(df.shape[0]):
-    ave.append(df[i, 0:73].mean())
-ave = np.array(ave)
-sns.lineplot(ave, ax=ax[1])
+# calculate the mean value of a neighborhood
+def CalculateNeighborhoodMean(arr, width):
+    assert width > 0
+    ave = []
+    for i in range(arr.shape[0]):
+        cnt = 0
+        ans = 0 # sum value of the neighborhood
+        for j in range(-width, width + 1):
+            pos = i + j
+            if 0 <= pos and pos < arr.shape[0]:
+                ans += arr[pos]
+                cnt += 1
+        ave.append(ans / cnt)
+    assert len(ave) == len(arr)
+    return np.array(ave)
 
-# output the Middle Freq ave map
-ave = []
+# calculate std var
+def CalculateNeighborhoodStd(arr, width):
+    assert width > 0
+    std = []
+    for i in range(arr.shape[0]):
+        cnt = 0
+        ave = 0 # sum 
+        var = 0 # sqr sum
+        for j in range(-width, width + 1):
+            pos = i + j
+            if 0 <= pos and pos < arr.shape[0]:
+                ave += arr[pos]
+                var += arr[pos] ** 2
+                cnt += 1
+        std.append((var/cnt - (ave/cnt)**2) ** 0.5)
+    assert len(std) == len(arr)
+    return np.array(std)
+
+# calculate the Low Freq ave map
+aveL = []
 for i in range(df.shape[0]):
-    ave.append(df[i, 73:292].mean())
-ave = np.array(ave)
-sns.lineplot(ave, ax=ax[2])
+    aveL.append(df[i, 0:73].mean())
+aveL = np.array(aveL)
+
+# sns.lineplot(np.r_[aveL, CalculateNeighborhoodStd(aveL, WIDTH), CalculateNeighborhoodStd(aveL, WIDTH)],
+#        ax = ax[1])
+
+data_np = np.c_[aveL, CalculateNeighborhoodMean(aveL, WIDTH), CalculateNeighborhoodStd(aveL, WIDTH)] 
+data_df = pd.DataFrame(data_np, None, ["ave", "NbMean", "NbStd"])
+sns.lineplot(data_df, ax=ax[1])
+
+# calculate the Middle Freq ave map
+aveH = []
+for i in range(df.shape[0]):
+    aveH.append(df[i, 73:292].mean())
+aveH = np.array(aveH)
+
+data_np = np.c_[aveH, CalculateNeighborhoodMean(aveH, WIDTH), CalculateNeighborhoodStd(aveH, WIDTH)] 
+data_df = pd.DataFrame(data_np, None, ["ave", "NbMean", "NbStd"])
+sns.lineplot(data_df, ax=ax[2])
 
 # dump picture into file
 plt.savefig('./Data/TMP/TMP.png')

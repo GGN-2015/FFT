@@ -1,5 +1,8 @@
 #!/bin/bash
 
+LINE_WIDTH=16384
+CUT_WIDTH=1024
+
 if [ "$1" = "" ] ; then
     echo -e "[auto.Error] Usage $0 \<ID\>"
     exit 0
@@ -13,14 +16,14 @@ else
 fi
 
 echo -e "[auto] Generating $1.txt ... "
-python3 ./Tools/WavReader.py ./Data/WAV/$1.wav 16384 > ./Data/TXT/$1.txt
+python3 ./Tools/WavReader.py ./Data/WAV/$1.wav ${LINE_WIDTH} > ./Data/TXT/$1.txt
 
 echo -e "[auto] Generating $1.fft ... "
-./Tools/runfft/cut2packet ./Data/TXT/$1.txt 16384
+./Tools/runfft/cut2packet ./Data/TXT/$1.txt ${LINE_WIDTH}
 mv ./Data/TMP/TMP.fft ./Data/FFT/$1.fft
 
 echo -e "[auto] Generating $1.png ... "
-python3 ./Tools/HeatMap.py ./Data/FFT/$1.fft 1024
+python3 ./Tools/HeatMap.py ./Data/FFT/$1.fft ${CUT_WIDTH}
 mv ./Data/TMP/TMP.png ./Data/PIC/$1.png
 
 echo -e "[auto] Done."

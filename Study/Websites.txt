@@ -10,3 +10,7 @@ https://www.cnblogs.com/ranson7zop/p/7657874.html
 # mp3 转 wav
 ffmpeg -i 啥啊.mp3 -acodec pcm_u8 -ar 44100 啥啊.wav
 https://zhuanlan.zhihu.com/p/91257681
+
+# 特征值分解与主成分分析
+https://mp.weixin.qq.com/s/Dv51K8JETakIKe5dPBAPVg
+https://zhuanlan.zhihu.com/p/37777074
