@@ -10,14 +10,20 @@ if len(sys.argv) not in [3, 4]:
 PARTS = [0, 73, 146, 292, 584, 1024]
 WIDTH = 4 
 MAX_HEIGHT = 16
+FRAME_RATE_FILE = "./Data/JSON/frameRate.json"
 FRAME_RATE = 16384
-BASE_RATE  = 48000 
+# BASE_RATE  = 48000 
 
 # import process is very slow
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+
+def GetWavFileName(filename: str):
+    lis = filename.split('.')[:-1]
+    lis.append('wav')
+    return ('.'.join(lis)).replace('FFT', 'WAV')
 
 # load argv arguments
 if len(sys.argv) == 3:
@@ -30,6 +36,16 @@ else:
     manFile     = sys.argv[2]
     lineWidth   = int(sys.argv[3])
 
+# Get BASE_RATE
+wavFile = GetWavFileName(fileName)
+import json
+frameRate = json.load(open(FRAME_RATE_FILE))
+sys.stderr.write("[HeatMap] wavFile = %s\n" % wavFile)
+
+assert frameRate.get(wavFile) is not None
+BASE_RATE = int(frameRate[wavFile])
+sys.stderr.write("[HeatMap] BASE_RATE = %d\n" % BASE_RATE)
+
 # read in every line from the file
 df=[]
 for line in open(fileName):
@@ -39,7 +55,7 @@ for line in open(fileName):
 # Read in MAN FILE
 if HAS_MANFILE:
     import GenerateManSeq
-    manSeq = GenerateManSeq(len(df), manFile, FRAME_RATE, \
+    manSeq = GenerateManSeq.GenerateManSeq(len(df), manFile, FRAME_RATE, \
             BASE_RATE, (WIDTH + 1) * MAX_HEIGHT)
 
 # take a log is reasonable because its value is really high
@@ -64,6 +80,18 @@ sns.heatmap(df.T, cmap="YlOrRd", ax=ax[0])
 # ave = np.array(ave)
 # sns.lineplot(ave, ax=ax[1])
 
+# Calculate Neighborhood Max
+def CalculateNeighborhoodMax(arr, width):
+    assert width > 0
+    ave = []
+    for i in range(arr.shape[0]):
+        L = max(0, i - width)
+        R = min(arr.shape[0] - 1, i + width)
+
+        ave.append(arr[L : R+1].max())
+    assert len(ave) == len(arr)
+    return np.array(ave)
+
 # calculate the mean value of a neighborhood
 def CalculateNeighborhoodMean(arr, width):
     assert width > 0
@@ -81,7 +109,7 @@ def CalculateNeighborhoodMean(arr, width):
     return np.array(ave)
 
 # calculate std var
-def CalculateNeighborhoodStd(arr, width):
+def CalculateNeighborhoodVar(arr, width):
     assert width > 0
     std = []
     for i in range(arr.shape[0]):
@@ -94,7 +122,7 @@ def CalculateNeighborhoodStd(arr, width):
                 ave += arr[pos]
                 var += arr[pos] ** 2
                 cnt += 1
-        std.append((var/cnt - (ave/cnt)**2) ** 0.5)
+        std.append((var/cnt - (ave/cnt)**2))
     assert len(std) == len(arr)
     return np.array(std)
 
@@ -109,7 +137,8 @@ aveL = np.array(aveL)
 
 # show subplot in axID
 def ShowDataInSubPlot(aveNP, axID):
-    data_np = np.c_[aveNP, CalculateNeighborhoodMean(aveNP, WIDTH), CalculateNeighborhoodStd(aveNP, WIDTH)] 
+    data_np = np.c_[aveNP, CalculateNeighborhoodMax(aveNP, WIDTH), \
+            CalculateNeighborhoodVar(aveNP, WIDTH)] 
     tags = ["ave", "NbMean", "NbStd"]
 
     if HAS_MANFILE:
