@@ -17,6 +17,9 @@ if [ "$2" != "--jmp" ] ; then
         echo -e "[auto] $1.wav Found ..."
     fi
 
+    # echo -e "[auto] Generating $1.wav ... "
+    # python3 ./Tools/Mp3Wav.py ./Data/MP3/$1.mp3 ./Data/WAV/$1.wav
+
     echo -e "[auto] Generating $1.txt ... "
     python3 ./Tools/WavReader.py ./Data/WAV/$1.wav ${LINE_WIDTH} > ./Data/TXT/$1.txt
 

@@ -38,27 +38,9 @@ for line in open(fileName):
 
 # Read in MAN FILE
 if HAS_MANFILE:
-    # every line in the file is a time slot
-    slotCnt = len(df)
-    manSeq  = [0] * slotCnt
-    stotal  = (FRAME_RATE / BASE_RATE) * slotCnt 
-
-    sys.stderr.write("[HeatMap] stotal = %d\n" % stotal)
-
-    for line in open(manFile):
-        sl = line.strip()
-        if sl == "" or sl[0] == "#": # empty line or comment
-            continue
-        minute, second = map(int, sl.split(':'))
-        stime = minute * 60 + second
-        
-        # round to an even number
-        pos = round(stime / stotal * slotCnt)
-        sys.stderr.write("[HeatMap] set pos = %d\n" % pos)
-
-        if 0 <= pos and pos < slotCnt:
-            manSeq[pos] = (WIDTH + 1) * MAX_HEIGHT
-    manSeq = np.array(manSeq)
+    import GenerateManSeq
+    manSeq = GenerateManSeq(len(df), manFile, FRAME_RATE, \
+            BASE_RATE, (WIDTH + 1) * MAX_HEIGHT)
 
 # take a log is reasonable because its value is really high
 # +1 to avoid number 0

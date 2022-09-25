@@ -13,6 +13,11 @@ import numpy as np
 from scipy import *
 from pylab import *
 
+# load frame_rate file
+import json
+FRAME_RATE_FILE = './Data/JSON/frameRate.json'
+frameRate = json.load(open(FRAME_RATE_FILE))
+
 def OpenWavFile(filename: str):
     wavefile     = wave.open(filename, 'r')
     
@@ -26,6 +31,10 @@ def OpenWavFile(filename: str):
     sys.stderr.write("[WavReader] sample_width: %10d.\n" % sample_width)
     sys.stderr.write("[WavReader] frame_rate  : %10d.\n" % frame_rate)
     sys.stderr.write("[WavReader] nframes     : %10d.\n" % nframes)
+
+    # save frameRate to file
+    frameRate[filename] = frame_rate
+    json.dump(frameRate, open(FRAME_RATE_FILE, "w"), indent=4)
 
     # sometimes ffmpeg output wav with sample_width = 1
     assert sample_width == 2
