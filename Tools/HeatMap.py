@@ -1,9 +1,17 @@
 import sys
 
 # check argv
-if len(sys.argv) != 3:
-    sys.stderr.write("[HeatMap] Usage: python3 HeatMap.py <file.fft> <LineWidth>")
+if len(sys.argv) not in [3, 4]:
+    sys.stderr.write("[HeatMap] Usage: python3 HeatMap.py <file.fft> <LineWidth>\n")
+    sys.stderr.write("[HeatMap]    OR: python3 HeatMap.py <file.fft> <file.man> <LineWidth>\n")
     exit()
+
+# music parts
+PARTS = [0, 73, 146, 292, 584, 1024]
+WIDTH = 4 
+MAX_HEIGHT = 16
+FRAME_RATE = 16384
+BASE_RATE  = 48000 
 
 # import process is very slow
 import numpy as np
@@ -12,8 +20,15 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # load argv arguments
-fileName  = sys.argv[1]
-lineWidth = int(sys.argv[2])
+if len(sys.argv) == 3:
+    HAS_MANFILE = False
+    fileName    = sys.argv[1]
+    lineWidth   = int(sys.argv[2])
+else:
+    HAS_MANFILE = True
+    fileName    = sys.argv[1]
+    manFile     = sys.argv[2]
+    lineWidth   = int(sys.argv[3])
 
 # read in every line from the file
 df=[]
@@ -21,13 +36,33 @@ for line in open(fileName):
     tmp  = [float(x) for x in line.split()] [:lineWidth]
     df.append(tmp)
 
+# Read in MAN FILE
+if HAS_MANFILE:
+    # every line in the file is a time slot
+    slotCnt = len(df)
+    manSeq  = [0] * slotCnt
+    stotal  = (FRAME_RATE / BASE_RATE) * slotCnt 
+
+    sys.stderr.write("[HeatMap] stotal = %d\n" % stotal)
+
+    for line in open(manFile):
+        sl = line.strip()
+        if sl == "" or sl[0] == "#": # empty line or comment
+            continue
+        minute, second = map(int, sl.split(':'))
+        stime = minute * 60 + second
+        
+        # round to an even number
+        pos = round(stime / stotal * slotCnt)
+        sys.stderr.write("[HeatMap] set pos = %d\n" % pos)
+
+        if 0 <= pos and pos < slotCnt:
+            manSeq[pos] = (WIDTH + 1) * MAX_HEIGHT
+    manSeq = np.array(manSeq)
+
 # take a log is reasonable because its value is really high
 # +1 to avoid number 0
 df = np.log(np.array(df) + 1)
-
-# music part
-PARTS = [0, 73, 146, 292, 584, 1024]
-WIDTH = 4 
 
 print(df)
 # set picture size
@@ -90,9 +125,18 @@ aveL = np.array(aveL)
 # sns.lineplot(np.r_[aveL, CalculateNeighborhoodStd(aveL, WIDTH), CalculateNeighborhoodStd(aveL, WIDTH)],
 #        ax = ax[1])
 
-data_np = np.c_[aveL, CalculateNeighborhoodMean(aveL, WIDTH), CalculateNeighborhoodStd(aveL, WIDTH)] 
-data_df = pd.DataFrame(data_np, None, ["ave", "NbMean", "NbStd"])
-sns.lineplot(data_df, ax=ax[1])
+# show subplot in axID
+def ShowDataInSubPlot(aveNP, axID):
+    data_np = np.c_[aveNP, CalculateNeighborhoodMean(aveNP, WIDTH), CalculateNeighborhoodStd(aveNP, WIDTH)] 
+    tags = ["ave", "NbMean", "NbStd"]
+
+    if HAS_MANFILE:
+        data_np = np.c_[data_np, CalculateNeighborhoodMean(manSeq, WIDTH)]
+        tags.append("ManCut")
+    data_df = pd.DataFrame(data_np, None, tags) 
+    sns.lineplot(data_df, ax=ax[axID])
+
+ShowDataInSubPlot(aveL, 1)
 
 # calculate the Middle Freq ave map
 aveH = []
@@ -100,9 +144,7 @@ for i in range(df.shape[0]):
     aveH.append(df[i, 73:292].mean())
 aveH = np.array(aveH)
 
-data_np = np.c_[aveH, CalculateNeighborhoodMean(aveH, WIDTH), CalculateNeighborhoodStd(aveH, WIDTH)] 
-data_df = pd.DataFrame(data_np, None, ["ave", "NbMean", "NbStd"])
-sns.lineplot(data_df, ax=ax[2])
+ShowDataInSubPlot(aveH, 2)
 
 # dump picture into file
 plt.savefig('./Data/TMP/TMP.png')

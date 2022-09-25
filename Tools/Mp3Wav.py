@@ -1,7 +1,7 @@
 from pydub import AudioSegment
 
 def mp3_to_wav(mp3_path, wav_path):
-    song = AudioSegment.from_mp3(mp3_path)
+    song = AudioSegment.from_mp3(mp3_path).set_frame_rate(44100)
     song.export(wav_path, format="wav")
 
 import sys

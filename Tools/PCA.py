@@ -1,10 +1,11 @@
 import sys
 
 if len(sys.argv) != 3:
-    sys.stderr.write("[PCA] Usage: python3 PCA.py <file.txt> <linewidth>\n")
+    sys.stderr.write("[PCA] Usage: python3 PCA.py <file.fft> <linewidth>\n")
     exit()
 
 # get argv from sys.argv
+MAX_WIDTH = 1024
 filename  = sys.argv[1]
 linewidth = int(sys.argv[2])
 
@@ -20,11 +21,15 @@ def GetNumpyFromFile(filename, lineWidth):
         if sl != "":
             tmp = list(map(float, sl.split()))
             assert len(tmp) == lineWidth
-            ans.append(tmp)
+            ans.append(tmp[:MAX_WIDTH])
     return np.array(ans)
 
 # X is the data to do PCA
 X = GetNumpyFromFile(filename, linewidth)
+
+# Z-score normalizationg
+from sklearn import preprocessing
+X = preprocessing.scale(X)
 
 # run pca model on X
 # calculate variance_ratio for all column
@@ -46,6 +51,8 @@ Model_PCA.fit(X)
 
 sys.stderr.write("[PCA] n_components_ = %d\n" % \
         Model_PCA.n_components_)
+sys.stderr.write("[PCA] var_ratio = " + str(Model_PCA.explained_variance_ratio_) + "\n")
+sys.stderr.write("[PCA] components_[1] = " + str(Model_PCA.components_[1]) + "\n")
 
 Components = Model_PCA.components_
 for i in range(Components.shape[0]):
