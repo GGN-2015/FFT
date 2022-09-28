@@ -8,7 +8,12 @@ if [ "$1" = "" ] ; then
     exit 0
 fi
 
-NAME=`printf "%04d" $1`
+if [ `expr length "$1"` -ge 4 ] ; then
+    NAME=$1
+else
+    NAME=`printf "%04d" $1`
+fi
+
 echo -e "[auto] NAME = ${NAME}"
 
 # --jmp means to jump WAV, TXT, FFT

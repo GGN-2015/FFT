@@ -92,6 +92,25 @@ def CalculateNeighborhoodMax(arr, width):
     assert len(ave) == len(arr)
     return np.array(ave)
 
+# Calculate Neighborhood Min 
+def CalculateNeighborhoodMin(arr, width):
+    assert width > 0
+    ave = []
+    for i in range(arr.shape[0]):
+        L = max(0, i - width)
+        R = min(arr.shape[0] - 1, i + width)
+
+        ave.append(arr[L : R+1].min())
+    assert len(ave) == len(arr)
+    return np.array(ave)
+
+
+# Calculate Neighborhood Min 
+def CalculateNeighborhoodDelta(arr, width):
+    return (
+            CalculateNeighborhoodMax(arr, width) -
+            CalculateNeighborhoodMin(arr, width))
+
 # calculate the mean value of a neighborhood
 def CalculateNeighborhoodMean(arr, width):
     assert width > 0
@@ -103,6 +122,22 @@ def CalculateNeighborhoodMean(arr, width):
             pos = i + j
             if 0 <= pos and pos < arr.shape[0]:
                 ans += arr[pos]
+                cnt += 1
+        ave.append(ans / cnt)
+    assert len(ave) == len(arr)
+    return np.array(ave)
+
+# calculate total mean
+def CalculateNeighborhoodTotalMean(arr, width):
+    assert width > 0
+    ave = []
+    for i in range(arr.shape[0]):
+        cnt = 0
+        ans = 0
+        for j in range(-width, width + 1):
+            pos = i + j
+            if 0 <= pos and pos < arr.shape[0]:
+                ans += arr[pos].mean()
                 cnt += 1
         ave.append(ans / cnt)
     assert len(ave) == len(arr)
@@ -138,8 +173,8 @@ aveL = np.array(aveL)
 # show subplot in axID
 def ShowDataInSubPlot(aveNP, axID):
     data_np = np.c_[aveNP, CalculateNeighborhoodMax(aveNP, WIDTH), \
-            CalculateNeighborhoodVar(aveNP, WIDTH)] 
-    tags = ["ave", "NbMean", "NbStd"]
+            CalculateNeighborhoodDelta(aveNP, WIDTH)] 
+    tags = ["ave", "NbMax", "NbDelta"]
 
     if HAS_MANFILE:
         data_np = np.c_[data_np, CalculateNeighborhoodMean(manSeq, WIDTH)]
@@ -152,7 +187,7 @@ ShowDataInSubPlot(aveL, 1)
 # calculate the Middle Freq ave map
 aveH = []
 for i in range(df.shape[0]):
-    aveH.append(df[i, 73:292].mean())
+    aveH.append(np.median(df[i, 732:1024]))
 aveH = np.array(aveH)
 
 ShowDataInSubPlot(aveH, 2)
