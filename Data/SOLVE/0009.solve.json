@@ -1,0 +1,116 @@
+[
+    {
+        "id": 0,
+        "starttime": 0,
+        "endtime": 860,
+        "column": 4
+    },
+    {
+        "id": 1,
+        "starttime": 861,
+        "endtime": 2450,
+        "column": 0
+    },
+    {
+        "id": 2,
+        "starttime": 2451,
+        "endtime": 4008,
+        "column": 5
+    },
+    {
+        "id": 3,
+        "starttime": 4009,
+        "endtime": 4981,
+        "column": 7
+    },
+    {
+        "id": 4,
+        "starttime": 4982,
+        "endtime": 11609,
+        "column": 3
+    },
+    {
+        "id": 5,
+        "starttime": 11610,
+        "endtime": 18165,
+        "column": 2
+    },
+    {
+        "id": 6,
+        "starttime": 18166,
+        "endtime": 18889,
+        "column": 5
+    },
+    {
+        "id": 7,
+        "starttime": 18890,
+        "endtime": 21056,
+        "column": 1
+    },
+    {
+        "id": 8,
+        "starttime": 21057,
+        "endtime": 24558,
+        "column": 6
+    },
+    {
+        "id": 9,
+        "starttime": 24559,
+        "endtime": 29027,
+        "column": 3
+    },
+    {
+        "id": 10,
+        "starttime": 29028,
+        "endtime": 29715,
+        "column": 2
+    },
+    {
+        "id": 11,
+        "starttime": 29717,
+        "endtime": 29718,
+        "column": 2
+    },
+    {
+        "id": 12,
+        "starttime": 29719,
+        "endtime": 31372,
+        "column": 3
+    },
+    {
+        "id": 13,
+        "starttime": 31373,
+        "endtime": 44187,
+        "column": 2
+    },
+    {
+        "id": 14,
+        "starttime": 44188,
+        "endtime": 44476,
+        "column": 3
+    },
+    {
+        "id": 15,
+        "starttime": 44477,
+        "endtime": 47415,
+        "column": 0
+    },
+    {
+        "id": 16,
+        "starttime": 47416,
+        "endtime": 47817,
+        "column": 5
+    },
+    {
+        "id": 17,
+        "starttime": 47818,
+        "endtime": 48533,
+        "column": 7
+    },
+    {
+        "id": 18,
+        "starttime": 48534,
+        "endtime": 49252,
+        "column": 4
+    }
+]

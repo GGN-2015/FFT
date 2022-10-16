@@ -44,6 +44,6 @@ in `Data.txt`, there should be $N$ float value, where $\exist k \in \N, N = 2^k$
 | 0029 | 心碎烧酒                            | https://www.bilibili.com/video/BV1eE411K7iw/                 |
 | 0030 | 纯蓝                                | https://www.bilibili.com/video/BV1z64y1b7H4/                 |
 | 0031 | Nightension                         | https://www.bilibili.com/video/BV1M741187C5/                 |
-| 0032 | BIRTHDAY ReoNa                      | https://www.bilibili.com/video/BV1H5411j71c/                 |
+| 0032 | BIRTHDAY                            | https://www.bilibili.com/video/BV1H5411j71c/                 |
 |      |                                     |                                                              |
 

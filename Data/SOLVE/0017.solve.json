@@ -1,0 +1,128 @@
+[
+    {
+        "id": 0,
+        "starttime": 0,
+        "endtime": 45,
+        "column": 7
+    },
+    {
+        "id": 1,
+        "starttime": 46,
+        "endtime": 3221,
+        "column": 4
+    },
+    {
+        "id": 2,
+        "starttime": 3222,
+        "endtime": 6436,
+        "column": 1
+    },
+    {
+        "id": 3,
+        "starttime": 6437,
+        "endtime": 9033,
+        "column": 0
+    },
+    {
+        "id": 4,
+        "starttime": 9034,
+        "endtime": 14762,
+        "column": 2
+    },
+    {
+        "id": 5,
+        "starttime": 14763,
+        "endtime": 17254,
+        "column": 6
+    },
+    {
+        "id": 6,
+        "starttime": 17255,
+        "endtime": 17618,
+        "column": 0
+    },
+    {
+        "id": 7,
+        "starttime": 17619,
+        "endtime": 20648,
+        "column": 1
+    },
+    {
+        "id": 8,
+        "starttime": 20649,
+        "endtime": 21502,
+        "column": 0
+    },
+    {
+        "id": 9,
+        "starttime": 21503,
+        "endtime": 21525,
+        "column": 1
+    },
+    {
+        "id": 10,
+        "starttime": 21526,
+        "endtime": 21728,
+        "column": 0
+    },
+    {
+        "id": 11,
+        "starttime": 21729,
+        "endtime": 21975,
+        "column": 1
+    },
+    {
+        "id": 12,
+        "starttime": 21976,
+        "endtime": 23259,
+        "column": 0
+    },
+    {
+        "id": 13,
+        "starttime": 23260,
+        "endtime": 29085,
+        "column": 2
+    },
+    {
+        "id": 14,
+        "starttime": 29086,
+        "endtime": 31433,
+        "column": 3
+    },
+    {
+        "id": 15,
+        "starttime": 31434,
+        "endtime": 31557,
+        "column": 0
+    },
+    {
+        "id": 16,
+        "starttime": 31558,
+        "endtime": 31571,
+        "column": 2
+    },
+    {
+        "id": 17,
+        "starttime": 31572,
+        "endtime": 34485,
+        "column": 5
+    },
+    {
+        "id": 18,
+        "starttime": 34486,
+        "endtime": 37848,
+        "column": 2
+    },
+    {
+        "id": 19,
+        "starttime": 37849,
+        "endtime": 40319,
+        "column": 3
+    },
+    {
+        "id": 20,
+        "starttime": 40320,
+        "endtime": 41500,
+        "column": 7
+    }
+]
